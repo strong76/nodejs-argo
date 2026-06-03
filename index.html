@@ -3,963 +3,746 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeFlow | Visual Development Platform</title>
+    <title>Discord Translation Bot Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9fbfd;
-        }
-        
-        h1, h2, h3, h4 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            line-height: 1.3;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #f0f0f0;
+            min-height: 100vh;
+            padding: 20px;
         }
         
         .container {
-            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
         }
         
-        /* Header & Navigation */
         header {
-            background-color: #fff;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            position: fixed;
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border-left: 5px solid #7289da;
+        }
+        
+        h1 {
+            color: #7289da;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #b9bbbe;
+            font-size: 1.2rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(30, 31, 34, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border-top: 4px solid #7289da;
+        }
+        
+        .card h2 {
+            color: #7289da;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h2 i {
+            font-size: 1.4rem;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #43b581;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.offline {
+            background-color: #f04747;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b9bbbe;
+        }
+        
+        select, input, textarea {
             width: 100%;
-            z-index: 1000;
+            padding: 12px 15px;
+            background: #202225;
+            border: 1px solid #40444b;
+            border-radius: 8px;
+            color: #f0f0f0;
+            font-size: 1rem;
         }
         
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: monospace;
         }
         
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo-icon {
-            color: #4361ee;
-            font-size: 28px;
-            margin-right: 10px;
-        }
-        
-        .logo-text {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-        }
-        
-        .logo-text span {
-            color: #4361ee;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #4361ee;
-        }
-        
-        .cta-button {
-            background-color: #4361ee;
+        .btn {
+            background: #7289da;
             color: white;
             border: none;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .cta-button:hover {
-            background-color: #3a56d4;
+        .btn:hover {
+            background: #677bc4;
             transform: translateY(-2px);
         }
         
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #333;
-            cursor: pointer;
+        .btn-danger {
+            background: #ed4245;
         }
         
-        /* Hero Section */
-        .hero {
-            padding: 150px 0 100px;
-            background: linear-gradient(135deg, #f0f4ff 0%, #f9fbfd 100%);
+        .btn-danger:hover {
+            background: #c03537;
         }
         
-        .hero-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .btn-success {
+            background: #3ba55c;
         }
         
-        .hero-text {
-            flex: 1;
-            padding-right: 40px;
+        .btn-success:hover {
+            background: #2d8b4a;
         }
         
-        .hero-text h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #222;
-        }
-        
-        .hero-text h1 span {
-            color: #4361ee;
-        }
-        
-        .hero-text p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 30px;
-            max-width: 600px;
-        }
-        
-        .hero-buttons {
+        .btn-group {
             display: flex;
             gap: 15px;
+            margin-top: 20px;
         }
         
-        .secondary-button {
-            background-color: white;
-            color: #4361ee;
-            border: 2px solid #4361ee;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+        .translation-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
         
-        .secondary-button:hover {
-            background-color: #f0f4ff;
+        .translation-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
-        .hero-image {
+        .translation-result {
+            background: #202225;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 60px;
+            border-left: 4px solid #3ba55c;
+        }
+        
+        .code-section {
+            margin-top: 40px;
+        }
+        
+        .code-container {
+            background: #1e1f22;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .code-header {
+            background: #2f3136;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .code-header h3 {
+            color: #7289da;
+        }
+        
+        pre {
+            padding: 25px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .language-python {
+            color: #f8f8f2;
+        }
+        
+        .token-keyword {
+            color: #ff79c6;
+        }
+        
+        .token-function {
+            color: #50fa7b;
+        }
+        
+        .token-string {
+            color: #f1fa8c;
+        }
+        
+        .token-comment {
+            color: #6272a4;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .stat-box {
+            background: rgba(30, 31, 34, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
             flex: 1;
-            text-align: center;
+            min-width: 150px;
         }
         
-        .hero-image img {
-            max-width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 20px 40px rgba(67, 97, 238, 0.15);
-        }
-        
-        /* Features Section */
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .section-title h2 {
-            font-size: 36px;
-            color: #222;
-            margin-bottom: 15px;
-        }
-        
-        .section-title p {
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .features {
-            padding: 100px 0;
-            background-color: white;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-        
-        .feature-card {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .feature-icon {
-            background-color: #eef2ff;
-            color: #4361ee;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 28px;
-        }
-        
-        .feature-card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        
-        .feature-card p {
-            color: #666;
-        }
-        
-        /* Benefits Section */
-        .benefits {
-            padding: 100px 0;
-            background-color: #f0f4ff;
-        }
-        
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-        
-        .benefit-item {
-            text-align: center;
-            padding: 30px 20px;
-        }
-        
-        .benefit-icon {
-            color: #4361ee;
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-        
-        .benefit-item h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        
-        .benefit-item p {
-            color: #666;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 100px 0;
-            background-color: white;
-        }
-        
-        .testimonial-slider {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-        
-        .testimonial {
-            background: #f9fbfd;
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .testimonial-text {
-            font-size: 18px;
-            font-style: italic;
-            margin-bottom: 30px;
-            color: #555;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .author-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #ddd;
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #4361ee;
-            font-size: 24px;
-        }
-        
-        .author-info h4 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        
-        .author-info p {
-            color: #777;
-            font-size: 14px;
-        }
-        
-        /* Pricing Section */
-        .pricing {
-            padding: 100px 0;
-            background-color: #f9fbfd;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        
-        .pricing-card {
-            background: white;
-            border-radius: 10px;
-            padding: 40px 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-        
-        .pricing-card.featured {
-            border-top: 5px solid #4361ee;
-            transform: scale(1.05);
-            position: relative;
-        }
-        
-        .featured-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4361ee;
-            color: white;
-            padding: 5px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .pricing-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .pricing-card.featured:hover {
-            transform: scale(1.05) translateY(-10px);
-        }
-        
-        .plan-name {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        .plan-price {
-            font-size: 48px;
+        .stat-value {
+            font-size: 2.5rem;
             font-weight: 700;
-            color: #4361ee;
-            margin-bottom: 20px;
+            color: #7289da;
         }
         
-        .plan-price span {
-            font-size: 16px;
-            color: #777;
+        .stat-label {
+            color: #b9bbbe;
+            margin-top: 5px;
         }
         
-        .plan-features {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-        
-        .plan-features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            color: #555;
-        }
-        
-        .plan-features li:last-child {
-            border-bottom: none;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
-            text-align: center;
-            color: white;
-        }
-        
-        .cta-section h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        
-        .cta-section p {
-            font-size: 18px;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            opacity: 0.9;
-        }
-        
-        .cta-section .cta-button {
-            background-color: white;
-            color: #4361ee;
-            font-size: 16px;
-            padding: 15px 40px;
-        }
-        
-        .cta-section .cta-button:hover {
-            background-color: #f0f4ff;
-        }
-        
-        /* Footer */
         footer {
-            background-color: #222;
-            color: #ccc;
-            padding: 70px 0 20px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-        
-        .footer-column h3 {
-            font-size: 20px;
-            color: white;
-            margin-bottom: 25px;
-        }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-        
-        .footer-links a {
-            color: #aaa;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: #4361ee;
-        }
-        
-        .copyright {
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            font-size: 14px;
-            color: #888;
+            margin-top: 50px;
+            padding: 20px;
+            color: #b9bbbe;
+            border-top: 1px solid #40444b;
         }
         
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .hero-content {
+        .response-message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .success {
+            background: rgba(59, 165, 92, 0.2);
+            border-left: 4px solid #3ba55c;
+            display: block;
+        }
+        
+        .error {
+            background: rgba(237, 66, 69, 0.2);
+            border-left: 4px solid #ed4245;
+            display: block;
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-group {
                 flex-direction: column;
             }
             
-            .hero-text {
-                padding-right: 0;
-                margin-bottom: 50px;
-                text-align: center;
-            }
-            
-            .hero-text p {
-                margin: 0 auto 30px;
-            }
-            
-            .pricing-card.featured {
-                transform: none;
-            }
-            
-            .pricing-card.featured:hover {
-                transform: translateY(-10px);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .hero-text h1 {
-                font-size: 36px;
-            }
-            
-            .section-title h2 {
-                font-size: 30px;
-            }
-            
-            .hero-buttons {
+            .stats {
                 flex-direction: column;
-                align-items: center;
-            }
-            
-            .hero-buttons button {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .hero {
-                padding: 130px 0 80px;
-            }
-            
-            .features, .benefits, .testimonials, .pricing, .cta-section {
-                padding: 70px 0;
-            }
-            
-            .feature-card, .testimonial {
-                padding: 25px;
-            }
-            
-            .plan-price {
-                font-size: 36px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header & Navigation -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <div class="logo-icon"><i class="fas fa-bezier-curve"></i></div>
-                    <div class="logo-text">Code<span>Flow</span></div>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-discord"></i> Discord Translation Bot</h1>
+            <p class="subtitle">Multi-language real-time translation bot control panel</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h2><i class="fas fa-cogs"></i> Bot Control</h2>
+                
+                <div class="status-indicator">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">Bot Status: Online</span>
                 </div>
                 
-                <ul class="nav-links">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#benefits">Benefits</a></li>
-                    <li><a href="#testimonials">Testimonials</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#">Resources</a></li>
-                </ul>
-                
-                <button class="cta-button">Start Free Trial</button>
-                <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>Build Apps Faster With <span>Visual Development</span></h1>
-                    <p>CodeFlow empowers teams to create enterprise-grade applications with minimal coding. Drag, drop, and connect components to build powerful web and mobile apps in record time.</p>
-                    <div class="hero-buttons">
-                        <button class="cta-button">Start Building Free</button>
-                        <button class="secondary-button">Watch Demo</button>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="CodeFlow Platform Interface">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>Powerful Features for Rapid Development</h2>
-                <p>CodeFlow provides all the tools you need to build, deploy, and scale applications without writing extensive code.</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-th-large"></i>
-                    </div>
-                    <h3>Visual Builder</h3>
-                    <p>Drag and drop UI components to design responsive interfaces. Connect data sources with simple point-and-click actions.</p>
+                <div class="control-group">
+                    <label for="apiKey"><i class="fas fa-key"></i> API Key</label>
+                    <input type="password" id="apiKey" placeholder="Enter translation API key" value="sk-********************">
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3>Database Integration</h3>
-                    <p>Connect to any data source with built-in connectors. Automatically generate CRUD operations without writing SQL.</p>
+                <div class="control-group">
+                    <label for="defaultLang"><i class="fas fa-globe"></i> Default Target Language</label>
+                    <select id="defaultLang">
+                        <option value="zh">Simplified Chinese</option>
+                        <option value="en" selected>English</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="es">Spanish</option>
+                        <option value="ru">Russian</option>
+                    </select>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Cross-Platform</h3>
-                    <p>Build once, deploy everywhere. Generate applications for web, iOS, and Android from a single visual design.</p>
+                <div class="control-group">
+                    <label for="autoChannels"><i class="fas fa-broadcast-tower"></i> Auto-Translation Channel IDs (comma separated)</label>
+                    <input type="text" id="autoChannels" placeholder="Example: 123456789, 987654321" value="987654321, 123456789">
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>Extensible with Code</h3>
-                    <p>Add custom functionality with JavaScript when needed. Our platform doesn't limit your creativity or complexity.</p>
+                <div class="btn-group">
+                    <button class="btn" id="saveBtn">
+                        <i class="fas fa-save"></i> Save Configuration
+                    </button>
+                    <button class="btn btn-success" id="restartBtn">
+                        <i class="fas fa-redo"></i> Restart Bot
+                    </button>
+                    <button class="btn btn-danger" id="stopBtn">
+                        <i class="fas fa-stop"></i> Stop Bot
+                    </button>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Enterprise Security</h3>
-                    <p>Built-in authentication, authorization, and data encryption. SOC2 compliant with enterprise-grade security features.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h3>One-Click Deployment</h3>
-                    <p>Deploy to cloud or on-premises with a single click. Automatic scaling and monitoring included.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section class="benefits" id="benefits">
-        <div class="container">
-            <div class="section-title">
-                <h2>Why Choose CodeFlow?</h2>
-                <p>Join thousands of companies accelerating their digital transformation with low-code development.</p>
+                <div id="controlMessage" class="response-message"></div>
             </div>
             
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>10x Faster Development</h3>
-                    <p>Build applications in days instead of months with visual development tools.</p>
-                </div>
+            <div class="card">
+                <h2><i class="fas fa-language"></i> Translation Demo</h2>
                 
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-money-bill-wave"></i>
+                <div class="translation-demo">
+                    <div class="translation-box">
+                        <label for="sourceText"><i class="fas fa-keyboard"></i> Enter text to translate</label>
+                        <textarea id="sourceText" placeholder="Enter text to translate...">Hello! How are you today? This is a test of the Discord translation bot.</textarea>
                     </div>
-                    <h3>Reduce Costs by 70%</h3>
-                    <p>Lower development and maintenance costs with fewer resources required.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-users"></i>
+                    
+                    <div class="control-group">
+                        <label for="targetLang"><i class="fas fa-arrow-right"></i> Target Language</label>
+                        <select id="targetLang">
+                            <option value="zh" selected>Simplified Chinese</option>
+                            <option value="en">English</option>
+                            <option value="ja">Japanese</option>
+                            <option value="ko">Korean</option>
+                            <option value="fr">French</option>
+                            <option value="de">German</option>
+                        </select>
                     </div>
-                    <h3>Citizen Developers</h3>
-                    <p>Enable business users to build solutions with minimal IT assistance.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Scale Effortlessly</h3>
-                    <p>From prototype to enterprise-scale applications with the same platform.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials" id="testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>Trusted by Industry Leaders</h2>
-                <p>See what our customers have to say about their experience with CodeFlow.</p>
-            </div>
-            
-            <div class="testimonial-slider">
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        "CodeFlow transformed how we deliver solutions to our business units. What used to take 6 months now takes 3 weeks. Our development team can focus on complex problems while business teams build their own solutions."
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">SC</div>
-                        <div class="author-info">
-                            <h4>Sarah Chen</h4>
-                            <p>CTO, TechGrowth Inc.</p>
+                    
+                    <button class="btn" id="translateBtn">
+                        <i class="fas fa-exchange-alt"></i> Translate Text
+                    </button>
+                    
+                    <div class="translation-box">
+                        <label><i class="fas fa-language"></i> Translation Result</label>
+                        <div class="translation-result" id="translationResult">
+                            Translation result will appear here...
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <div class="section-title">
-                <h2>Simple, Transparent Pricing</h2>
-                <p>Choose the plan that fits your needs. All plans include core features with no hidden fees.</p>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="totalTranslations">1,247</div>
+                <div class="stat-label">Total Translations</div>
             </div>
+            <div class="stat-box">
+                <div class="stat-value" id="activeChannels">8</div>
+                <div class="stat-label">Active Channels</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="supportedLangs">12</div>
+                <div class="stat-label">Supported Languages</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="uptime">99.2%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </div>
+        
+        <div class="code-section">
+            <h2><i class="fas fa-code"></i> Python Backend Code Example</h2>
+            <p>Below is a simple Python code example for a Discord translation bot:</p>
             
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3 class="plan-name">Starter</h3>
-                    <div class="plan-price">$29<span>/month</span></div>
-                    <ul class="plan-features">
-                        <li>Up to 5 users</li>
-                        <li>10 GB storage</li>
-                        <li>Basic components</li>
-                        <li>Community support</li>
-                        <li>1 production app</li>
-                    </ul>
-                    <button class="secondary-button">Get Started</button>
+            <div class="code-container">
+                <div class="code-header">
+                    <h3>discord_translator.py</h3>
+                    <button class="btn" id="copyCodeBtn">
+                        <i class="far fa-copy"></i> Copy Code
+                    </button>
                 </div>
-                
-                <div class="pricing-card featured">
-                    <div class="featured-badge">Most Popular</div>
-                    <h3 class="plan-name">Professional</h3>
-                    <div class="plan-price">$89<span>/month</span></div>
-                    <ul class="plan-features">
-                        <li>Up to 25 users</li>
-                        <li>100 GB storage</li>
-                        <li>All components</li>
-                        <li>Priority support</li>
-                        <li>10 production apps</li>
-                        <li>Custom branding</li>
-                    </ul>
-                    <button class="cta-button">Try Free for 14 Days</button>
-                </div>
-                
-                <div class="pricing-card">
-                    <h3 class="plan-name">Enterprise</h3>
-                    <div class="plan-price">Custom</div>
-                    <ul class="plan-features">
-                        <li>Unlimited users</li>
-                        <li>Unlimited storage</li>
-                        <li>All features included</li>
-                        <li>24/7 dedicated support</li>
-                        <li>Unlimited apps</li>
-                        <li>On-premises option</li>
-                    </ul>
-                    <button class="secondary-button">Contact Sales</button>
-                </div>
-            </div>
-        </div>
-    </section>
+                <pre><code class="language-python">import discord
+from discord.ext import commands
+import googletrans
+from googletrans import Translator
+import asyncio
+import json
+import os
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2>Start Building Today</h2>
-            <p>Join over 10,000 companies that use CodeFlow to accelerate their application development. No credit card required for the free trial.</p>
-            <button class="cta-button">Get Started for Free</button>
-        </div>
-    </section>
+# Load configuration
+with open('config.json', 'r') as f:
+    config = json.load(f)
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <div class="logo">
-                        <div class="logo-icon"><i class="fas fa-bezier-curve"></i></div>
-                        <div class="logo-text">Code<span>Flow</span></div>
-                    </div>
-                    <p style="margin-top: 20px; color: #aaa;">The leading visual development platform for building enterprise applications with minimal coding.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Product</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Features</a></li>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">Use Cases</a></li>
-                        <li><a href="#">Integrations</a></li>
-                        <li><a href="#">Roadmap</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Tutorials</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Support</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Company</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
+# Initialize translator
+translator = Translator()
+
+# Set bot prefix and intents
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix='!', intents=intents)
+
+class TranslationBot(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.auto_channels = config.get('auto_channels', [])
+        self.default_lang = config.get('default_lang', 'en')
+        
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{self.bot.user} has logged in successfully!')
+        print(f'Default translation language: {self.default_lang}')
+        print(f'Auto-translation channels: {self.auto_channels}')
+        
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        # Ignore bot's own messages
+        if message.author == self.bot.user:
+            return
             
-            <div class="copyright">
-                <p>&copy; 2023 CodeFlow. All rights reserved.</p>
+        # Check if in auto-translation channels
+        if str(message.channel.id) in self.auto_channels and not message.content.startswith('!'):
+            # Detect message language
+            detected = translator.detect(message.content)
+            src_lang = detected.lang
+            
+            # Translate if message language is not default language
+            if src_lang != self.default_lang:
+                try:
+                    translation = translator.translate(
+                        message.content, 
+                        src=src_lang, 
+                        dest=self.default_lang
+                    )
+                    
+                    # Create embed message to show translation
+                    embed = discord.Embed(
+                        title="Translation Result",
+                        color=discord.Color.blue()
+                    )
+                    embed.add_field(name="Original", value=message.content, inline=False)
+                    embed.add_field(name="Translation", value=translation.text, inline=False)
+                    embed.set_footer(text=f"{src_lang} → {self.default_lang}")
+                    
+                    await message.channel.send(embed=embed)
+                except Exception as e:
+                    print(f"Translation error: {e}")
+                    
+    @commands.command(name="translate", aliases=["tr"])
+    async def translate_command(self, ctx, *, text):
+        """Translate text to default language"""
+        try:
+            translation = translator.translate(text, dest=self.default_lang)
+            
+            embed = discord.Embed(
+                title="Translation Result",
+                color=discord.Color.green()
+            )
+            embed.add_field(name="Original", value=text, inline=False)
+            embed.add_field(name="Translation", value=translation.text, inline=False)
+            embed.set_footer(text=f"{translation.src} → {self.default_lang}")
+            
+            await ctx.send(embed=embed)
+        except Exception as e:
+            await ctx.send(f"Translation error: {e}")
+            
+    @commands.command(name="setlang")
+    @commands.has_permissions(administrator=True)
+    async def set_language(self, ctx, lang_code):
+        """Set default translation language"""
+        supported_langs = googletrans.LANGUAGES
+        
+        if lang_code in supported_langs:
+            self.default_lang = lang_code
+            config['default_lang'] = lang_code
+            
+            # Save to configuration file
+            with open('config.json', 'w') as f:
+                json.dump(config, f, indent=4)
+                
+            await ctx.send(f"Default translation language set to: {supported_langs[lang_code]} ({lang_code})")
+        else:
+            await ctx.send(f"Unsupported language code. Please use valid language codes like: en, zh, ja, ko, etc.")
+            
+    @commands.command(name="autotranslate")
+    @commands.has_permissions(administrator=True)
+    async def toggle_auto_translate(self, ctx):
+        """Enable/disable auto-translation in current channel"""
+        channel_id = str(ctx.channel.id)
+        
+        if channel_id in self.auto_channels:
+            self.auto_channels.remove(channel_id)
+            status = "Disabled"
+        else:
+            self.auto_channels.append(channel_id)
+            status = "Enabled"
+            
+        config['auto_channels'] = self.auto_channels
+        
+        with open('config.json', 'w') as f:
+            json.dump(config, f, indent=4)
+            
+        await ctx.send(f"Auto-translation {status} in this channel.")
+
+async def main():
+    async with bot:
+        await bot.add_cog(TranslationBot(bot))
+        await bot.start(config['discord_token'])
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
             </div>
         </div>
-    </footer>
-
+        
+        <footer>
+            <p>Discord Translation Bot Control Panel &copy; 2026 | Built with Python | Supports multi-language real-time translation</p>
+        </footer>
+    </div>
+    
     <script>
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        // Simulate API responses
+        function showMessage(elementId, message, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = isSuccess ? 'response-message success' : 'response-message error';
             
-            // Adjust for mobile
-            if (window.innerWidth <= 768) {
-                if (navLinks.style.display === 'flex') {
-                    navLinks.style.flexDirection = 'column';
-                    navLinks.style.position = 'absolute';
-                    navLinks.style.top = '80px';
-                    navLinks.style.left = '0';
-                    navLinks.style.width = '100%';
-                    navLinks.style.backgroundColor = 'white';
-                    navLinks.style.padding = '20px';
-                    navLinks.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+            setTimeout(() => {
+                element.style.opacity = '1';
+            }, 10);
+            
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                element.style.opacity = '0';
+                setTimeout(() => {
+                    element.className = 'response-message';
+                }, 500);
+            }, 3000);
+        }
+        
+        // Save configuration
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            const apiKey = document.getElementById('apiKey').value;
+            const defaultLang = document.getElementById('defaultLang').value;
+            const autoChannels = document.getElementById('autoChannels').value;
+            
+            // This should be sent to backend API
+            console.log('Saving configuration:', { apiKey, defaultLang, autoChannels });
+            
+            // Simulate API call
+            setTimeout(() => {
+                showMessage('controlMessage', 'Configuration saved successfully!', true);
+            }, 300);
+        });
+        
+        // Restart bot
+        document.getElementById('restartBtn').addEventListener('click', function() {
+            const btn = this;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Restarting...';
+            btn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                
+                // Toggle status indicator
+                const statusDot = document.getElementById('statusDot');
+                const statusText = document.getElementById('statusText');
+                
+                statusDot.classList.add('offline');
+                statusText.textContent = 'Bot Status: Restarting...';
+                
+                setTimeout(() => {
+                    statusDot.classList.remove('offline');
+                    statusText.textContent = 'Bot Status: Online';
+                    showMessage('controlMessage', 'Bot restarted successfully!', true);
+                }, 2000);
+            }, 1500);
+        });
+        
+        // Stop bot
+        document.getElementById('stopBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to stop the translation bot?')) {
+                const btn = this;
+                const originalText = btn.innerHTML;
+                
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Stopping...';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
                     
-                    const navItems = document.querySelectorAll('.nav-links li');
-                    navItems.forEach(item => {
-                        item.style.margin = '10px 0';
-                    });
-                }
+                    // Update status indicator
+                    const statusDot = document.getElementById('statusDot');
+                    const statusText = document.getElementById('statusText');
+                    
+                    statusDot.classList.add('offline');
+                    statusText.textContent = 'Bot Status: Offline';
+                    
+                    showMessage('controlMessage', 'Bot has been stopped.', false);
+                }, 1000);
             }
         });
         
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    if(window.innerWidth <= 768) {
-                        document.querySelector('.nav-links').style.display = 'none';
-                    }
-                }
-            });
-        });
-        
-        // Simple testimonial slider
-        const testimonials = [
-            {
-                text: "CodeFlow transformed how we deliver solutions to our business units. What used to take 6 months now takes 3 weeks. Our development team can focus on complex problems while business teams build their own solutions.",
-                name: "Sarah Chen",
-                position: "CTO, TechGrowth Inc.",
-                initials: "SC"
-            },
-            {
-                text: "We reduced our app development time by 80% using CodeFlow. The visual interface made it easy for our analysts to build data dashboards without waiting for IT resources.",
-                name: "Marcus Johnson",
-                position: "Director of Operations, DataCorp",
-                initials: "MJ"
-            },
-            {
-                text: "As a non-technical founder, CodeFlow allowed me to build our MVP in just 2 months. I could test ideas quickly and iterate based on user feedback without deep coding knowledge.",
-                name: "Lisa Wang",
-                position: "Founder, StartupLabs",
-                initials: "LW"
+        // Translate text
+        document.getElementById('translateBtn').addEventListener('click', function() {
+            const sourceText = document.getElementById('sourceText').value;
+            const targetLang = document.getElementById('targetLang').value;
+            const resultElement = document.getElementById('translationResult');
+            
+            if (!sourceText.trim()) {
+                showMessage('controlMessage', 'Please enter text to translate.', false);
+                return;
             }
-        ];
-        
-        let currentTestimonial = 0;
-        const testimonialElement = document.querySelector('.testimonial');
-        
-        function rotateTestimonial() {
-            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-            updateTestimonial();
-        }
-        
-        function updateTestimonial() {
-            const testimonial = testimonials[currentTestimonial];
-            testimonialElement.innerHTML = `
-                <div class="testimonial-text">"${testimonial.text}"</div>
-                <div class="testimonial-author">
-                    <div class="author-avatar">${testimonial.initials}</div>
-                    <div class="author-info">
-                        <h4>${testimonial.name}</h4>
-                        <p>${testimonial.position}</p>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Auto-rotate testimonials every 5 seconds
-        setInterval(rotateTestimonial, 5000);
-        
-        // CTA button interactions
-        document.querySelectorAll('.cta-button').forEach(button => {
-            button.addEventListener('click', function() {
-                alert('Thank you for your interest in CodeFlow! You would be redirected to the signup page in a real implementation.');
-            });
+            
+            const btn = this;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Translating...';
+            btn.disabled = true;
+            
+            // Simulate translation API call
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                
+                // Simulate translation results
+                const translations = {
+                    'zh': '你好！你今天好吗？这是Discord翻译机器人的测试。',
+                    'en': 'Hello! How are you today? This is a test of the Discord translation bot.',
+                    'ja': 'こんにちは！今日はお元気ですか？これはDiscord翻訳ボットのテストです。',
+                    'ko': '안녕하세요! 오늘 어떠세요? 이것은 Discord 번역 봇 테스트입니다。',
+                    'fr': 'Bonjour! Comment allez-vous aujourd\'hui? Ceci est un test du bot de traduction Discord.',
+                    'de': 'Hallo! Wie geht es dir heute? Dies ist ein Test des Discord-Übersetzungsbots.'
+                };
+                
+                resultElement.textContent = translations[targetLang] || 'Translation result will appear here...';
+                
+                // Update total translation count
+                const totalElement = document.getElementById('totalTranslations');
+                let count = parseInt(totalElement.textContent.replace(',', ''));
+                totalElement.textContent = (count + 1).toLocaleString();
+                
+                showMessage('controlMessage', 'Text translated successfully!', true);
+            }, 800);
         });
         
-        // Pricing card interactions
-        document.querySelectorAll('.pricing-card button').forEach(button => {
-            button.addEventListener('click', function() {
-                const planName = this.closest('.pricing-card').querySelector('.plan-name').textContent;
-                alert(`You selected the ${planName} plan. In a real implementation, you would be redirected to the checkout process.`);
-            });
+        // Copy code
+        document.getElementById('copyCodeBtn').addEventListener('click', function() {
+            const codeElement = document.querySelector('pre code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const btn = this;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
+        });
+        
+        // Simulate real-time statistics updates
+        function updateStats() {
+            // Simulate active channels count change
+            const channelsElement = document.getElementById('activeChannels');
+            let channels = parseInt(channelsElement.textContent);
+            
+            // Randomly increase or decrease by 1 channel
+            const change = Math.random() > 0.5 ? 1 : -1;
+            const newChannels = Math.max(1, channels + change);
+            
+            if (newChannels !== channels) {
+                channelsElement.textContent = newChannels;
+            }
+            
+            // Update every 10 seconds
+            setTimeout(updateStats, 10000);
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start updating statistics
+            updateStats();
+            
+            // Simulate initial translation
+            document.getElementById('translateBtn').click();
         });
     </script>
 </body>
